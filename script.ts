@@ -20,6 +20,16 @@ class Profile implements GitHubUser{
         this.bio = bio;
         this.hireable = hireable;
     }
+
+    displayProfile() {
+        console.log('display details');
+        const doc = <HTMLDocument>document;
+        doc.getElementById('name').innerHTML = this.name;
+        (<HTMLImageElement>document.getElementById('avatar')).src = this.avatar;
+        doc.getElementById('location').innerHTML = this.location;
+        doc.getElementById('bio').innerHTML = this.bio;
+        doc.getElementById('hireable').innerHTML = this.hireable ? 'Yes' : 'No';
+    }
 }
 
 function getGitHubUser(username: string, callback: any) {
@@ -37,9 +47,14 @@ function getGitHubUser(username: string, callback: any) {
 
 function searchUser() {
     const username = (<HTMLInputElement>document.getElementById('username')).value;
+
     getGitHubUser(username, (response: string) => {
         let responseObj = JSON.parse(response);
         console.log('responseObj : ', responseObj);
+
+        const profile = new Profile(responseObj.name, responseObj.location, responseObj.avatar_url, responseObj.bio, responseObj.hireable);
+        profile.displayProfile();
+
     })
 
 }
